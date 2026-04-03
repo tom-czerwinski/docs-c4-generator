@@ -16,6 +16,7 @@ Run the desired `main` class with the required environment variables set (see be
 | Variable        | Required | Default            | Description                                                   |
 |-----------------|----------|--------------------|---------------------------------------------------------------|
 | `folderToScan`  | **Yes**  | —                  | Path to the folder (or JAR) containing compiled classes to scan |
+| `componentFindingStrategies` | **Yes** | — | Comma-separated list of `annotation=ComponentType` pairs that map Java annotations to C4 component types (e.g. `org.springframework.web.bind.annotation.RestController=INTERFACES_PUBLIC_API,org.springframework.stereotype.Service=DOMAIN_SERVICE`) |
 | `packageToScan` | No       | `no.catenda`       | Base Java package used to filter scanned classes               |
 | `outputFolder`  | No       | `target/docs-c4`   | Directory where generated diagrams are written                 |
 
@@ -83,6 +84,7 @@ docker run --rm \
 |----------|----------------------------------------------|-------------|
 | `GENERATOR_CLASS` | `...springboot.C4DiagramGeneratorSpringBoot` | Fully qualified main class to run |
 | `folderToScan` | `/input`                                     | Path inside the container to the mounted compiled classes |
+| `componentFindingStrategies` | — | Comma-separated `annotation=ComponentType` pairs (see above) |
 | `outputFolder` | `/output`                                    | Output directory inside the container |
 | `packageToScan` | `no.catenda`                                 | Base Java package filter |
 

@@ -2,6 +2,7 @@
   <configuration default="false" name="generate C4 - local SpringBoot" type="Application" factoryName="Application">
     <envs>
       <env name="folderToScan" value="$USER_HOME$/tk-tests/test-component86/test-component-service/target/classes" />
+      <env name="componentStrategies" value="org.springframework.web.bind.annotation.RestController=INTERFACES_PUBLIC_API,org.springframework.stereotype.Service=DOMAIN_SERVICE" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="no.catenda.docs.c4.springboot.C4DiagramGeneratorSpringBoot" />
     <module name="c4-generator" />

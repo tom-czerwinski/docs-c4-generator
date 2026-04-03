@@ -15,6 +15,7 @@ import no.catenda.docs.c4.C4DiagramGeneratorParent.ComponentType;
 @Builder(access = AccessLevel.PUBLIC)
 public class ComponentFindingConfiguration {
 
+  @Builder.Default
   private final Map<String, ComponentType> annotationToComponentType = new HashMap<>();
 
   @Getter
@@ -22,12 +23,6 @@ public class ComponentFindingConfiguration {
 
   @Getter
   private final boolean registerDefaultC4ExternalSystemAdapterAnnotationFinder;
-
-  public ComponentFindingConfiguration addStrategy(String fullyQualifiedAnnotationClassName,
-      ComponentType componentType) {
-    annotationToComponentType.put(fullyQualifiedAnnotationClassName, componentType);
-    return this;
-  }
 
   public Stream<Entry<String, ComponentType>> streamStrategies() {
     return annotationToComponentType.entrySet().stream();

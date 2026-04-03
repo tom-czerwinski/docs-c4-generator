@@ -16,7 +16,7 @@ public class C4DiagramGeneratorBimsync extends C4DiagramGeneratorParent {
   }
 
   public static void main(String[] args) throws Exception {
-    C4DiagramGeneratorStarter.startDropwizart("Bimsync", "Arena Edge");
+    C4DiagramGeneratorStarter.startDropwizard("Bimsync", "Arena Edge");
   }
 
   public void addC4ElementsToWorkspace(Workspace w, String systemName, String containerName) {

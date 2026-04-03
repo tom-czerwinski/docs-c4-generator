@@ -2,6 +2,7 @@
   <configuration default="false" name="generate C4 - Bimsync Arena Edge" type="Application" factoryName="Application">
     <envs>
       <env name="folderToScan" value="$PROJECT_DIR$/../bimsync/bimsync-arena-edge/target" />
+      <env name="componentStrategies" value="javax.ws.rs.Path=INTERFACES_PUBLIC_API" />
     </envs>
     <option name="MAIN_CLASS_NAME" value="no.catenda.docs.c4.dropwizard.C4DiagramGeneratorBimsync" />
     <module name="c4-generator" />

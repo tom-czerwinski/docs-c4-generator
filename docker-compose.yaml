@@ -16,6 +16,7 @@ services:
     profiles: [ "generate-springboot" ]
     environment:
       - GENERATOR_CLASS=no.catenda.docs.c4.springboot.C4DiagramGeneratorSpringBoot
+      - componentFindingStrategies=org.springframework.web.bind.annotation.RestController=INTERFACES_PUBLIC_API,org.springframework.stereotype.Service=DOMAIN_SERVICE
     volumes:
       - /Users/tom-czerwinski-catenda/tk-tests/test-component86/test-component-service/target/classes:/input:ro
       - ./target/docs-c4:/output
@@ -26,6 +27,7 @@ services:
     profiles: [ "generate-bimsync" ]
     environment:
       - GENERATOR_CLASS=no.catenda.docs.c4.dropwizard.C4DiagramGeneratorBimsync
+      - componentFindingStrategies=javax.ws.rs.Path=INTERFACES_PUBLIC_API
     volumes:
       - /Users/tom-czerwinski-catenda/IdeaProjects/bimsync/bimsync-arena-edge/target:/input:ro
       - ./target/docs-c4:/output
