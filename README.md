@@ -1,2 +1,4 @@
-# docs-c4-generator
-Documentation generator for C4 architecture diagrams
+# C4 Documentation generator
+
+Allows to generate C4 models from targeted Java-compiled-code
+

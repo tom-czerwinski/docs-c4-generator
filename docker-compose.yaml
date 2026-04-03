@@ -1,0 +1,11 @@
+version: "3"
+services:
+  #C4 architecture diagrams viewer
+  structurizr:
+    container_name: structurizr
+    image: structurizr/structurizr
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./target/docs-c4:/usr/local/structurizr
+    command: [ "local" ]

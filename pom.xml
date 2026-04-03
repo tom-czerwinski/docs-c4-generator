@@ -1,0 +1,208 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>no.catenda.docs.c4</groupId>
+  <artifactId>c4-generator</artifactId>
+  <name>c4-generator</name>
+  <version>1.0.0-SNAPSHOT</version>
+
+  <properties>
+    <java.version>25</java.version>
+    <junit-bom.version>5.13.2</junit-bom.version>
+    <jacoco.version>0.8.14</jacoco.version>
+    <lombok.version>1.18.34</lombok.version>
+    <spring-context.version>5.3.39</spring-context.version>
+    <assertj.version>3.27.6</assertj.version>
+    <structurizr.version>6.1.0</structurizr.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>${junit-bom.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <!-- compilation - enhancement - for generating boilerplate -->
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+      <optional>true</optional>
+    </dependency>
+
+    <dependency>
+      <!-- C4 architecture diagrams as code using Structurizr -->
+      <groupId>com.structurizr</groupId>
+      <artifactId>structurizr-client</artifactId>
+      <version>${structurizr.version}</version>
+    </dependency>
+    <dependency>
+      <!-- export C4 diagrams to PlantUML/Mermaid -->
+      <groupId>com.structurizr</groupId>
+      <artifactId>structurizr-export</artifactId>
+      <version>${structurizr.version}</version>
+    </dependency>
+    <dependency>
+      <!-- auto-discover C4 components from compiled classes -->
+      <groupId>com.structurizr</groupId>
+      <artifactId>structurizr-component</artifactId>
+      <version>${structurizr.version}</version>
+    </dependency>
+
+    <dependency>
+      <!-- filesystem-based class scanning for annotation discovery (replaces Spring classpath scanning) -->
+      <groupId>io.github.classgraph</groupId>
+      <artifactId>classgraph</artifactId>
+      <version>4.8.184</version>
+    </dependency>
+
+    <dependency>
+      <!-- logging - SLF4J simple backend (Spring's spring-jcl auto-bridges commons-logging to SLF4J) -->
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+    </dependency>
+
+    <dependency>
+      <!-- tests - all - core JUnit testing framework lib -->
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <!-- tests - all - beautifull assertions -->
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.9.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.1</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>1.18.42</version>
+              </path>
+            </annotationProcessorPaths>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.5.3</version>
+          <configuration>
+            <includes>
+              <include>**/*Test.java</include>
+              <include>**/*IT.java</include>
+              <include>**/*IntegrationTest.java</include>
+              <include>**/*ST.java</include>
+              <include>**/*SystemTest.java</include>
+              <include>**/*FT.java</include>
+              <include>**/*FunctionalTest.java</include>
+            </includes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${jacoco.version}</version>
+          <executions>
+            <execution>
+              <id>prepare-agent</id>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check</id>
+              <phase>verify</phase>
+              <goals>
+                <goal>check</goal>
+              </goals>
+            </execution>
+          </executions>
+          <configuration>
+            <rules>
+              <rule>
+                <element>BUNDLE</element>
+                <limits>
+                  <limit>
+                    <counter>LINE</counter>
+                    <value>COVEREDRATIO</value>
+                    <minimum>0.80</minimum>
+                  </limit>
+                  <limit>
+                    <counter>BRANCH</counter>
+                    <value>COVEREDRATIO</value>
+                    <minimum>0.50</minimum>
+                  </limit>
+                </limits>
+              </rule>
+            </rules>
+            <excludes>
+              <exclude>**/*Application.class</exclude>
+              <exclude>**/*Config.class</exclude>
+              <exclude>**/*Configuration.class</exclude>
+              <exclude>**/*Properties.class</exclude>
+              <exclude>**/interfaces/rest/**/dto/**</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <argLine>@{argLine} --enable-preview</argLine>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
