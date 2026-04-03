@@ -5,11 +5,6 @@ import static java.util.stream.Collectors.counting;
 import com.structurizr.Workspace;
 import com.structurizr.component.ComponentFinderBuilder;
 import com.structurizr.component.ComponentFinderStrategy;
-import com.structurizr.component.ComponentFinderStrategyBuilder;
-import com.structurizr.component.matcher.AnnotationTypeMatcher;
-import com.structurizr.component.naming.NamingStrategy;
-import com.structurizr.component.naming.TypeNamingStrategy;
-import com.structurizr.component.supporting.DefaultSupportingTypesStrategy;
 import com.structurizr.export.plantuml.StructurizrPlantUMLExporter;
 import com.structurizr.model.Component;
 import com.structurizr.model.Container;
@@ -39,19 +34,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class C4DiagramGeneratorParent {
-
-  public static final String DEFAULT_OUTPUT_FOLDER = "target/docs-c4";
-
-  public static final String DEFAULT_CLASSES_DIR = "target/classes";
-
-  public static final String DEFAULT_BASE_PACKAGE = "no.catenda";
-
-  public static final Supplier<NamingStrategy> DEFAULT_COMPONENT_NAMING_STRATEGY = () -> new TypeNamingStrategy();
 
   public C4DiagramGeneratorParent(String pathToJarOrFolderWithCompiledClasses,
       String basePackageForScanning,
@@ -59,7 +45,8 @@ public abstract class C4DiagramGeneratorParent {
     this.basePackageForScanning = basePackageForScanning;
     this.pathToJarOrFolderWithCompiledClasses = pathToJarOrFolderWithCompiledClasses;
     this.outputFolder = outputFolder;
-    this.componentFinderStrategyFactory = new ComponentFinderStrategyFactory(componentFindingConfiguration);
+    this.componentFinderStrategyFactory = new ComponentFinderStrategyFactory(
+        componentFindingConfiguration);
   }
 
   protected final String basePackageForScanning;
@@ -141,7 +128,8 @@ public abstract class C4DiagramGeneratorParent {
         .forEach(componentFinderBuilder::withStrategy);
 
     //TODO move to ComponentFinderStrategyFactory
-    if(componentFinderStrategyFactory.getConfiguration().isRegisterDefaultC4ExternalSystemAdapterAnnotationFinder()){
+    if (componentFinderStrategyFactory.getConfiguration()
+        .isRegisterDefaultC4ExternalSystemAdapterAnnotationFinder()) {
       registerDefaultC4ExternalSystemAdapterAnnotationFinder(componentFinderBuilder);
     }
 
@@ -190,7 +178,8 @@ public abstract class C4DiagramGeneratorParent {
             ComponentType.INTERFACES_PUBLIC_API)
     );
     finderBuilder.withStrategy(
-        componentFinderStrategyFactory.createComponentFinder("org.springframework.stereotype.Service",
+        componentFinderStrategyFactory.createComponentFinder(
+            "org.springframework.stereotype.Service",
             ComponentType.DOMAIN_SERVICE)
     );
   }
@@ -206,13 +195,15 @@ public abstract class C4DiagramGeneratorParent {
     findUsedC4ExternalSystemAnnotationTypes()
         //for each of the used C4ExternalSystem annotation, create
         .forEach(annotationType -> finderBuilder.withStrategy(
-            componentFinderStrategyFactory.createComponentFinder(annotationType, ComponentType.INFRASTRUCTURE_ADAPTER)
+            componentFinderStrategyFactory.createComponentFinder(annotationType,
+                ComponentType.INFRASTRUCTURE_ADAPTER)
         ));
   }
 
   protected ComponentFinderStrategy createComponentFinder(String annotationType,
       ComponentType infrastructureAdapter) {
-    return componentFinderStrategyFactory.createComponentFinder(annotationType, infrastructureAdapter);
+    return componentFinderStrategyFactory.createComponentFinder(annotationType,
+        infrastructureAdapter);
   }
 
   /**

@@ -1,0 +1,18 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="generate C4 - local SpringBoot" type="Application" factoryName="Application">
+    <envs>
+      <env name="folderToScan" value="$USER_HOME$/tk-tests/test-component86/test-component-service/target/classes" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="no.catenda.docs.c4.springboot.C4DiagramGeneratorSpringBoot" />
+    <module name="c4-generator" />
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="no.catenda.docs.c4.springboot.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
