@@ -9,3 +9,23 @@ services:
     volumes:
       - ./target/docs-c4:/usr/local/structurizr
     command: [ "local" ]
+
+  # C4 diagram generator for Spring Boot projects
+  c4-generator-springboot:
+    build: .
+    profiles: [ "generate-springboot" ]
+    environment:
+      - GENERATOR_CLASS=no.catenda.docs.c4.springboot.C4DiagramGeneratorSpringBoot
+    volumes:
+      - /Users/tom-czerwinski-catenda/tk-tests/test-component86/test-component-service/target/classes:/input:ro
+      - ./target/docs-c4:/output
+
+  # C4 diagram generator for Dropwizard/Bimsync projects
+  c4-generator-bimsync:
+    build: .
+    profiles: [ "generate-bimsync" ]
+    environment:
+      - GENERATOR_CLASS=no.catenda.docs.c4.dropwizard.C4DiagramGeneratorBimsync
+    volumes:
+      - /Users/tom-czerwinski-catenda/IdeaProjects/bimsync/bimsync-arena-edge/target:/input:ro
+      - ./target/docs-c4:/output

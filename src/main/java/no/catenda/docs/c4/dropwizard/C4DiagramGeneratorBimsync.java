@@ -15,7 +15,7 @@ public class C4DiagramGeneratorBimsync extends C4DiagramGeneratorParent {
     super(folderWithCompiledClasses, basePackageForScanning, outputFolder, configuration);
   }
 
-  static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
     C4DiagramGeneratorStarter.startDropwizart("Bimsync", "Arena Edge");
   }
 

@@ -16,7 +16,7 @@ public class C4DiagramGeneratorSpringBoot extends C4DiagramGeneratorParent {
     super(folderWithCompiledClasses, basePackageForScanning, outputFolder, configuration);
   }
 
-  static void main(String[] args) throws Exception {
+  public static void main(String[] args) throws Exception {
     C4DiagramGeneratorStarter.startSpringBoot("Test system/product", "Test container");
   }
 

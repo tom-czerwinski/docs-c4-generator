@@ -30,6 +30,62 @@ Two shared run configurations are included in `.idea/runConfigurations/`:
 
 Open the project in IntelliJ IDEA and the configurations will appear in the **Run/Debug** dropdown. Adjust the `folderToScan` value to point at the compiled classes of the service you want to document.
 
+## Running the C4 generator (Docker / Docker Compose)
+
+### Prerequisites
+
+Build the fat JAR on the host first:
+
+```bash
+./mvnw package -DskipTests
+```
+
+You can now build the Docker image:
+
+```bash
+docker compose build c4-generator-springboot
+```
+
+### Docker Compose
+
+Two preconfigured services are available via Docker Compose profiles:
+
+| Service | Profile | Generator |
+|---------|---------|-----------|
+| `c4-generator-springboot` | `generate-springboot` | Spring Boot scanner |
+| `c4-generator-bimsync` | `generate-bimsync` | Dropwizard/Bimsync scanner |
+
+Run a generator:
+
+```bash
+docker compose --profile generate-springboot run --rm --build c4-generator-springboot
+docker compose --profile generate-springboot run --rm --build c4-generator-bimsync
+```
+
+Each service mounts the target compiled classes as `/input` (read-only) and writes output to `./target/docs-c4` via the `/output` mount. Adjust the volume paths in `docker-compose.yaml` to point at the compiled classes of the service you want to document.
+
+### Standalone Docker run
+
+You can also run the image directly, mounting any classes directory:
+
+```bash
+docker build . && \
+docker run --rm \
+  -v /path/to/compiled/classes:/input:ro \
+  -v ./target/docs-c4:/output \
+  -e GENERATOR_CLASS=no.catenda.docs.c4.springboot.C4DiagramGeneratorSpringBoot \
+  docs-c4-generator
+```
+
+### Container environment variables
+
+| Variable | Default                                      | Description |
+|----------|----------------------------------------------|-------------|
+| `GENERATOR_CLASS` | `...springboot.C4DiagramGeneratorSpringBoot` | Fully qualified main class to run |
+| `folderToScan` | `/input`                                     | Path inside the container to the mounted compiled classes |
+| `outputFolder` | `/output`                                    | Output directory inside the container |
+| `packageToScan` | `no.catenda`                                 | Base Java package filter |
+
 ## Viewing generated diagrams (Docker Compose)
 
 A `docker-compose.yaml` is provided to start [Structurizr Lite](https://structurizr.com/), a local viewer for the generated `workspace.json`.

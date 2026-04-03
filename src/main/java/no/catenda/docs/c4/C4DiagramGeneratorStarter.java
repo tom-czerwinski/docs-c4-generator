@@ -6,16 +6,16 @@ import com.structurizr.component.naming.TypeNamingStrategy;
 import java.util.function.Supplier;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import no.catenda.docs.c4.C4DiagramGeneratorParent.ComponentType;
 import no.catenda.docs.c4.dropwizard.C4DiagramGeneratorBimsync;
 import no.catenda.docs.c4.springboot.C4DiagramGeneratorSpringBoot;
 
 @UtilityClass
+@Slf4j
 public class C4DiagramGeneratorStarter {
 
   public static final String DEFAULT_OUTPUT_FOLDER = "target/docs-c4";
-
-  public static final String DEFAULT_CLASSES_DIR = "target/classes";
 
   public static final String DEFAULT_BASE_PACKAGE = "no.catenda";
 
@@ -36,14 +36,22 @@ public class C4DiagramGeneratorStarter {
 
   public static String getEnvOrDefault(String envVar, String defaultValue) {
     String value = System.getenv(envVar);
-    return value != null && !value.isBlank() ? value : defaultValue;
+    if (value != null && !value.isBlank()) {
+      log.info("C4-docs - starting with '{}'='{}' (optional - provided by environment variables)", envVar, value);
+      return value;
+    } else {
+      log.info("C4-docs - starting with '{}'='{}' (optional - using default as empty provided)", envVar, defaultValue);
+      return defaultValue;
+    }
   }
 
   public static String getEnvOrException(String envVar) {
     String value = System.getenv(envVar);
     if (value == null || value.isBlank()) {
+      log.info("C4-docs - environment variable not provided: '{}'", envVar);
       throw new IllegalArgumentException("Mandatory environment variable not present: " + envVar);
     }
+    log.info("C4-docs - starting with '{}'='{}' (mandatory - provided by environment variables)", envVar, value);
     return value;
   }
 
