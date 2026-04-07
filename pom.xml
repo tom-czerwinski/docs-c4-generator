@@ -7,6 +7,12 @@
   <artifactId>c4-generator</artifactId>
   <name>c4-generator</name>
   <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>c4-generator-annotations</module>
+    <module>c4-generator-scanner</module>
+  </modules>
 
   <properties>
     <java.version>25</java.version>
@@ -27,65 +33,13 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>no.catenda.docs.c4</groupId>
+        <artifactId>c4-generator-annotations</artifactId>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
-
-  <dependencies>
-    <dependency>
-      <!-- compilation - enhancement - for generating boilerplate -->
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>${lombok.version}</version>
-      <optional>true</optional>
-    </dependency>
-
-    <dependency>
-      <!-- C4 architecture diagrams as code using Structurizr -->
-      <groupId>com.structurizr</groupId>
-      <artifactId>structurizr-client</artifactId>
-      <version>${structurizr.version}</version>
-    </dependency>
-    <dependency>
-      <!-- export C4 diagrams to PlantUML/Mermaid -->
-      <groupId>com.structurizr</groupId>
-      <artifactId>structurizr-export</artifactId>
-      <version>${structurizr.version}</version>
-    </dependency>
-    <dependency>
-      <!-- auto-discover C4 components from compiled classes -->
-      <groupId>com.structurizr</groupId>
-      <artifactId>structurizr-component</artifactId>
-      <version>${structurizr.version}</version>
-    </dependency>
-
-    <dependency>
-      <!-- filesystem-based class scanning for annotation discovery (replaces Spring classpath scanning) -->
-      <groupId>io.github.classgraph</groupId>
-      <artifactId>classgraph</artifactId>
-      <version>4.8.184</version>
-    </dependency>
-
-    <dependency>
-      <!-- logging - SLF4J simple backend (Spring's spring-jcl auto-bridges commons-logging to SLF4J) -->
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
-    </dependency>
-
-    <dependency>
-      <!-- tests - all - core JUnit testing framework lib -->
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-engine</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <!-- tests - all - beautifull assertions -->
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
 
   <build>
     <pluginManagement>
@@ -202,31 +156,6 @@
         </plugin>
       </plugins>
     </pluginManagement>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <argLine>@{argLine} --enable-preview</argLine>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-      </plugin>
-    </plugins>
   </build>
 
 </project>

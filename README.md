@@ -2,6 +2,15 @@
 
 Allows to generate C4 models from targeted Java-compiled-code.
 
+## Project structure
+
+This is a multi-module Maven project:
+
+| Module | Purpose |
+|--------|---------|
+| `c4-generator-annotations` | Lightweight annotation library (`@C4ExternalSystemAdapter` and variants). Add this as a dependency to services you want to document. |
+| `c4-generator-scanner` | Scanner/generator that reads compiled classes, discovers components, and produces Structurizr workspace files. Ships as a fat JAR. |
+
 ## Running the generator
 
 The generator has currently two entry points depending on the framework used by the target service:
@@ -44,7 +53,7 @@ Build the fat JAR on the host first:
 You can now build the Docker image:
 
 ```bash
-docker compose build c4-generator-springboot
+docker compose -f c4-generator-scanner/docker-compose.yaml build c4-generator-springboot
 ```
 
 ### Docker Compose
@@ -59,18 +68,18 @@ Two preconfigured services are available via Docker Compose profiles:
 Run a generator:
 
 ```bash
-docker compose --profile generate-springboot run --rm --build c4-generator-springboot
-docker compose --profile generate-springboot run --rm --build c4-generator-bimsync
+docker compose -f c4-generator-scanner/docker-compose.yaml --profile generate-springboot run --rm --build c4-generator-springboot
+docker compose -f c4-generator-scanner/docker-compose.yaml --profile generate-bimsync run --rm --build c4-generator-bimsync
 ```
 
-Each service mounts the target compiled classes as `/input` (read-only) and writes output to `./target/docs-c4` via the `/output` mount. Adjust the volume paths in `docker-compose.yaml` to point at the compiled classes of the service you want to document.
+Each service mounts the target compiled classes as `/input` (read-only) and writes output to `./target/docs-c4` via the `/output` mount. Adjust the volume paths in `c4-generator-scanner/docker-compose.yaml` to point at the compiled classes of the service you want to document.
 
 ### Standalone Docker run
 
 You can also run the image directly, mounting any classes directory:
 
 ```bash
-docker build . && \
+docker build c4-generator-scanner/ && \
 docker run --rm \
   -v /path/to/compiled/classes:/input:ro \
   -v ./target/docs-c4:/output \
@@ -90,12 +99,12 @@ docker run --rm \
 
 ## Viewing generated diagrams (Docker Compose)
 
-A `docker-compose.yaml` is provided to start [Structurizr Lite](https://structurizr.com/), a local viewer for the generated `workspace.json`.
+A `docker-compose.yaml` in `c4-generator-scanner/` is provided to start [Structurizr Lite](https://structurizr.com/), a local viewer for the generated `workspace.json`.
 
 Start the viewer:
 
 ```bash
-docker-compose up -d
+docker compose -f c4-generator-scanner/docker-compose.yaml up -d
 ```
 
 The UI is available at **http://localhost:8180**. It mounts `./target/docs-c4` so any regenerated diagrams are picked up automatically (refresh the browser).
@@ -103,6 +112,5 @@ The UI is available at **http://localhost:8180**. It mounts `./target/docs-c4` s
 Stop and remove the container:
 
 ```bash
-docker-compose down
+docker compose -f c4-generator-scanner/docker-compose.yaml down
 ```
-
